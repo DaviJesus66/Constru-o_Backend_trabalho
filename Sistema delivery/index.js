@@ -14,8 +14,8 @@ const  = require('./routes/');
 app.use();
 
 // TODO: Clientes - Importar e mapear
-const  = require('./routes/');
-app.use();
+const clientesRoutes = require('./routes/cliente');
+app.use(clientesRoutes);
 
 // TODO: Pedidos - Importar e mapear
 const  = require('./routes/');
