@@ -9,6 +9,25 @@ app.use(express.json())
 const restaurantRoutes = require('./routes/restaurantRoutes');
 app.use('/restaurants', restaurantRoutes);
 
+// TODO: Pratos - Importar e mapear
+const  = require('./routes/');
+app.use();
+
+// TODO: Clientes - Importar e mapear
+const clientesRoutes = require('./routes/cliente');
+app.use(clientesRoutes);
+
+// TODO: Pedidos - Importar e mapear
+const  = require('./routes/');
+app.use();
+
+// TODO: Entregadores - Importar e mapear
+const  = require('./routes/');
+app.use();
+
+// TODO: Pagamentos - Importar e mapear
+const  = require('./routes/');
+app.use();
 
 app.listen(3000, () => {
 console.log(`Servidor rodando em http://localhost:3000`);
