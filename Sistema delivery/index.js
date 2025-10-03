@@ -5,9 +5,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// TODO: Restaurante - Importar e mapear
-const  = require('./routes/');
-app.use();
+// TODO: Membro 1 - Importar e mapear
+const restaurantRoutes = require('./routes/restaurantRoutes');
+app.use('/restaurants', restaurantRoutes);
 
 // TODO: Pratos - Importar e mapear
 const  = require('./routes/');
