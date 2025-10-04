@@ -22,7 +22,7 @@ function validarPrato(body) {
     return { ok: false, mensagem: "Campo 'preco' deve ser um número maior que 0" };
   }
 
-  const rest = restaurantes.find(r => r.id == idRestaurante);
+  const rest = restaurantes.find(r => r.id === Number(idRestaurante));
   if (!rest) {
     return { ok: false, mensagem: "idRestaurante inválido (restaurante não encontrado)" };
   }
@@ -55,35 +55,33 @@ router.get("/", (req, res) => {
 
 /** READ by ID */
 router.get("/:id", (req, res) => {
-  const prato = pratos.find(p => p.id == req.params.id);
+  const prato = pratos.find(p => p.id === Number(req.params.id));
   if (!prato) return res.status(404).json({ erro: "Prato não encontrado" });
   res.json(prato);
 });
 
 /** UPDATE (substituição completa) */
 router.put("/:id", (req, res) => {
-  const prato = pratos.find(p => p.id == req.params.id);
-  if (!prato) return res.status(404).json({ erro: "Prato não encontrado" });
+  const idx = pratos.findIndex(p => p.id === Number(req.params.id));
+  if (idx === -1) return res.status(404).json({ erro: "Prato não encontrado" });
 
   const v = validarPrato(req.body);
   if (!v.ok) return res.status(400).json({ erro: v.mensagem });
 
-  // atualiza campos
-  prato.nome = v.prato.nome;
-  prato.preco = v.prato.preco;
-  prato.descricao = v.prato.descricao;
-  prato.idRestaurante = v.prato.idRestaurante;
+  const atualizado = { id: Number(req.params.id), ...v.prato };
+  pratos[idx] = atualizado;
 
-  res.json(prato);
+  res.json(atualizado);
 });
 
 /** DELETE */
 router.delete("/:id", (req, res) => {
-  const idx = pratos.findIndex(p => p.id == req.params.id);
+  const idx = pratos.findIndex(p => p.id === Number(req.params.id));
   if (idx === -1) return res.status(404).json({ erro: "Prato não encontrado" });
 
   const removido = pratos.splice(idx, 1)[0];
-  res.json(removido);
+  res.json({ mensagem: "Prato removido com sucesso", prato: removido });
 });
 
 module.exports = router;
+

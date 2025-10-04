@@ -5,27 +5,22 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// TODO: Membro 1 - Importar e mapear
-const restaurantRoutes = require('./routes/restaurantRoutes');
-app.use('/restaurants', restaurantRoutes);
-
-
-
-// TODO: Clientes - Importar e mapear
+// TODO: Membro - Importar e mapear
 const clientesRoutes = require('./routes/cliente');
 app.use(clientesRoutes);
 
+const entregadoresRoutes = require('./entregadoresRoutes')
+app.use(entregadoresRoutes);
 
+const pagamentosRoutes = require('./pagamentosRoutes')
+app.use(pagamentosRoutes);
 
-const deliveryRoutes = require('./deliveryRoutes')
+const pratosRoutes = require('./pratosRoutes')
+app.use(pratosRoutes);
 
-app.use(express.json())
-app.use('/entregadores', deliveryRoutes)
-
-
+const restaurantesRoutes = require('./routes/restaurantesRoutes');
+app.use(restaurantesRoutes);
 
 app.listen(3000, () => {
 console.log(`Servidor rodando em http://localhost:3000`);
 })
-
-

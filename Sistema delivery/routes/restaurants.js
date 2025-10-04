@@ -30,25 +30,33 @@ function validarRestaurante(body) {
       return { ok: false, message: `Campo obrigatório: ${campo}` }
     }
   }
+
+  // validação simples de CNPJ (14 dígitos)
+  if (!/^\d{14}$/.test(body.cnpj)) {
+    return { ok: false, message: "CNPJ inválido (precisa ter 14 dígitos)" }
+  }
+
   return { ok: true }
 }
 
 // Verifica duplicação de CNPJ ou nome
 function existeDuplicado(campo, valor, ignoreId = null) {
-  return restaurantes.some(r => r[campo] === valor && r.id !== ignoreId)
+  const normalizado = String(valor).trim().toLowerCase()
+  return restaurantes.some(r =>
+    String(r[campo]).trim().toLowerCase() === normalizado && r.id !== ignoreId
+  )
 }
 
-
-//listar todos
+// listar todos
 router.get('/', (req, res) => {
   res.json(restaurantes)
 })
 
-//buscar por ID
+// buscar por ID
 router.get('/:id', (req, res) => {
   const id = Number(req.params.id)
   const restaurante = restaurantes.find(r => r.id === id)
-  if (!restaurante) return res.status(404).json({ error: 'Restaurante não encontrado' })
+  if (!restaurante) return res.status(404).json({ erro: 'Restaurante não encontrado' })
   res.json(restaurante)
 })
 
@@ -56,13 +64,13 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   const body = req.body
   const v = validarRestaurante(body)
-  if (!v.ok) return res.status(400).json({ error: v.message })
+  if (!v.ok) return res.status(400).json({ erro: v.message })
 
   if (existeDuplicado('cnpj', body.cnpj)) {
-    return res.status(409).json({ error: 'CNPJ já cadastrado' })
+    return res.status(409).json({ erro: 'CNPJ já cadastrado' })
   }
   if (existeDuplicado('nome', body.nome)) {
-    return res.status(409).json({ error: 'Nome já cadastrado' })
+    return res.status(409).json({ erro: 'Nome já cadastrado' })
   }
 
   const novo = {
@@ -78,21 +86,21 @@ router.post('/', (req, res) => {
   res.status(201).json(novo)
 })
 
-//atualizar
+// atualizar
 router.put('/:id', (req, res) => {
   const id = Number(req.params.id)
   const idx = restaurantes.findIndex(r => r.id === id)
-  if (idx === -1) return res.status(404).json({ error: 'Restaurante não encontrado' })
+  if (idx === -1) return res.status(404).json({ erro: 'Restaurante não encontrado' })
 
   const body = req.body
   const v = validarRestaurante(body)
-  if (!v.ok) return res.status(400).json({ error: v.message })
+  if (!v.ok) return res.status(400).json({ erro: v.message })
 
   if (existeDuplicado('cnpj', body.cnpj, id)) {
-    return res.status(409).json({ error: 'CNPJ já cadastrado' })
+    return res.status(409).json({ erro: 'CNPJ já cadastrado' })
   }
   if (existeDuplicado('nome', body.nome, id)) {
-    return res.status(409).json({ error: 'Nome já cadastrado' })
+    return res.status(409).json({ erro: 'Nome já cadastrado' })
   }
 
   const atualizado = {
@@ -112,10 +120,10 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   const id = Number(req.params.id)
   const idx = restaurantes.findIndex(r => r.id === id)
-  if (idx === -1) return res.status(404).json({ error: 'Restaurante não encontrado' })
+  if (idx === -1) return res.status(404).json({ erro: 'Restaurante não encontrado' })
 
   const removido = restaurantes.splice(idx, 1)[0]
-  res.json({ message: 'Restaurante removido', restaurante: removido })
+  res.json({ mensagem: 'Restaurante removido com sucesso', restaurante: removido })
 })
 
 module.exports = router

@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 
 // GET - Buscar por ID
 router.get("/:id", (req, res) => {
-  const pagamento = pagamentos.find(p => p.id === parseInt(req.params.id));
+  const pagamento = pagamentos.find(p => p.id === parseInt(req.params.id, 10));
   if (!pagamento) {
     return res.status(404).json({ message: "Forma de pagamento não encontrada" });
   }
@@ -39,7 +39,7 @@ router.post("/", (req, res) => {
 
 // PUT - Atualizar existente
 router.put("/:id", (req, res) => {
-  const pagamento = pagamentos.find(p => p.id === parseInt(req.params.id));
+  const pagamento = pagamentos.find(p => p.id === parseInt(req.params.id, 10));
   if (!pagamento) {
     return res.status(404).json({ message: "Forma de pagamento não encontrada" });
   }
@@ -52,20 +52,21 @@ router.put("/:id", (req, res) => {
 
   pagamento.tipo = tipo;
   pagamento.descricao = descricao;
-  pagamento.ativo = ativo;
+  pagamento.ativo = ativo ?? pagamento.ativo; // mantém o valor anterior se não for enviado
 
   res.json(pagamento);
 });
 
 // DELETE - Remover
 router.delete("/:id", (req, res) => {
-  const index = pagamentos.findIndex(p => p.id === parseInt(req.params.id));
+  const index = pagamentos.findIndex(p => p.id === parseInt(req.params.id, 10));
   if (index === -1) {
     return res.status(404).json({ message: "Forma de pagamento não encontrada" });
   }
 
-  const removido = pagamentos.splice(index, 1);
-  res.json(removido[0]);
+  const removido = pagamentos.splice(index, 1)[0];
+  res.json({ message: "Forma de pagamento removida", pagamento: removido });
 });
 
 module.exports = router;
+

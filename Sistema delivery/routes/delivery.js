@@ -29,7 +29,7 @@ function validarEntregador(body) {
   const obrigatorios = ['nome', 'cpf', 'email', 'telefone', 'placaVeiculo', 'tipoVeiculo']
   for (const campo of obrigatorios) {
     if (!body[campo] || String(body[campo]).trim() === '') {
-        return { ok: false, message: `Campo obrigatório: ${campo}` }
+      return { ok: false, message: `Campo obrigatório: ${campo}` }
     }
   }
   return { ok: true }
@@ -40,14 +40,12 @@ function existeDuplicado(campo, valor, ignoreId = null) {
   return entregadores.some(e => e[campo] === valor && e.id !== ignoreId)
 }
 
-
-
-//listar todos
+// Listar todos
 router.get('/', (req, res) => {
   res.json(entregadores)
 })
 
-// buscar por ID
+// Buscar por ID
 router.get('/:id', (req, res) => {
   const id = Number(req.params.id)
   const entregador = entregadores.find(e => e.id === id)
@@ -55,7 +53,7 @@ router.get('/:id', (req, res) => {
   res.json(entregador)
 })
 
-// criar novo
+// Criar novo
 router.post('/', (req, res) => {
   const body = req.body
   const v = validarEntregador(body)
@@ -82,7 +80,7 @@ router.post('/', (req, res) => {
   res.status(201).json(novo)
 })
 
-// PUT /entregadores/:id → atualizar
+// Atualizar existente
 router.put('/:id', (req, res) => {
   const id = Number(req.params.id)
   const idx = entregadores.findIndex(e => e.id === id)
@@ -113,7 +111,7 @@ router.put('/:id', (req, res) => {
   res.json(atualizado)
 })
 
-// DELETE /entregadores/:id → deletar
+// Deletar
 router.delete('/:id', (req, res) => {
   const id = Number(req.params.id)
   const idx = entregadores.findIndex(e => e.id === id)
