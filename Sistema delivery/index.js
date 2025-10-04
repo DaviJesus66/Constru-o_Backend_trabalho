@@ -6,7 +6,7 @@ app.use(cors())
 app.use(express.json())
 
 // TODO: Membro - Importar e mapear
-const clientesRoutes = require('./routes/cliente');
+const clientesRoutes = require('./clientesRoutes');
 app.use(clientesRoutes);
 
 const entregadoresRoutes = require('./entregadoresRoutes')
