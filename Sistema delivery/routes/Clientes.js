@@ -1,6 +1,6 @@
 // routes/clientes.js
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
 // Simulação de "banco de dados" em memória
 let clientes = [
@@ -18,27 +18,25 @@ router.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ mensagem: "ID inválido" });
 
-  const clientes = clientes.find(c => c.id === id);
-  if (!clientes) return res.status(404).json({ mensagem: "Cliente não encontrado." });
+  const cliente = clientes.find(c => c.id === id);
+  if (!cliente) return res.status(404).json({ mensagem: "Cliente não encontrado." });
 
-  res.status(200).json(clientes);
+  res.status(200).json(cliente);
 });
 
 // Criar novo cliente
 router.post('/', (req, res) => {
   const { nome, email } = req.body;
-  if (!nome || !email) {
-    return res.status(400).json({ mensagem: "Nome e email são obrigatórios." });
-  }
+  if (!nome || !email) return res.status(400).json({ mensagem: "Nome e email são obrigatórios." });
 
-  const novoclientes = {
+  const novoCliente = {
     id: clientes.length ? clientes[clientes.length - 1].id + 1 : 1,
     nome: nome.trim(),
     email: email.trim()
   };
 
-  clientes.push(novoclientes);
-  res.status(201).json(novoclientes);
+  clientes.push(novoCliente);
+  res.status(201).json(novoCliente);
 });
 
 // Atualizar cliente existente
@@ -46,14 +44,14 @@ router.put('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ mensagem: "ID inválido" });
 
-  const clientesIndex = clientes.findIndex(c => c.id === id);
-  if (clientesIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
+  const clienteIndex = clientes.findIndex(c => c.id === id);
+  if (clienteIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
 
   const { nome, email } = req.body;
   if (!nome || !email) return res.status(400).json({ mensagem: "Nome e email são obrigatórios." });
 
-  clientes[clientesIndex] = { id, nome: nome.trim(), email: email.trim() };
-  res.status(200).json(clientes[clientesIndex]);
+  clientes[clienteIndex] = { id, nome: nome.trim(), email: email.trim() };
+  res.status(200).json(clientes[clienteIndex]);
 });
 
 // Remover cliente
@@ -61,12 +59,13 @@ router.delete('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ mensagem: "ID inválido" });
 
-  const clientesIndex = clientes.findIndex(c => c.id === id);
-  if (clientesIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
+  const clienteIndex = clientes.findIndex(c => c.id === id);
+  if (clienteIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
 
-  const removido = clientes.splice(clientesIndex, 1)[0];
-  res.status(200).json({ mensagem: "Cliente removido com sucesso.", clientes: removido });
+  const removido = clientes.splice(clienteIndex, 1)[0];
+  res.status(200).json({ mensagem: "Cliente removido com sucesso.", cliente: removido });
 });
 
 module.exports = router;
+
 
