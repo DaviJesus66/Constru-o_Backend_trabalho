@@ -18,10 +18,10 @@ router.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ mensagem: "ID inválido" });
 
-  const cliente = clientes.find(c => c.id === id);
-  if (!cliente) return res.status(404).json({ mensagem: "Cliente não encontrado." });
+  const clientes = clientes.find(c => c.id === id);
+  if (!clientes) return res.status(404).json({ mensagem: "Cliente não encontrado." });
 
-  res.status(200).json(cliente);
+  res.status(200).json(clientes);
 });
 
 // Criar novo cliente
@@ -31,14 +31,14 @@ router.post('/', (req, res) => {
     return res.status(400).json({ mensagem: "Nome e email são obrigatórios." });
   }
 
-  const novoCliente = {
+  const novoclientes = {
     id: clientes.length ? clientes[clientes.length - 1].id + 1 : 1,
     nome: nome.trim(),
     email: email.trim()
   };
 
-  clientes.push(novoCliente);
-  res.status(201).json(novoCliente);
+  clientes.push(novoclientes);
+  res.status(201).json(novoclientes);
 });
 
 // Atualizar cliente existente
@@ -46,14 +46,14 @@ router.put('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ mensagem: "ID inválido" });
 
-  const clienteIndex = clientes.findIndex(c => c.id === id);
-  if (clienteIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
+  const clientesIndex = clientes.findIndex(c => c.id === id);
+  if (clientesIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
 
   const { nome, email } = req.body;
   if (!nome || !email) return res.status(400).json({ mensagem: "Nome e email são obrigatórios." });
 
-  clientes[clienteIndex] = { id, nome: nome.trim(), email: email.trim() };
-  res.status(200).json(clientes[clienteIndex]);
+  clientes[clientesIndex] = { id, nome: nome.trim(), email: email.trim() };
+  res.status(200).json(clientes[clientesIndex]);
 });
 
 // Remover cliente
@@ -61,11 +61,11 @@ router.delete('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ mensagem: "ID inválido" });
 
-  const clienteIndex = clientes.findIndex(c => c.id === id);
-  if (clienteIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
+  const clientesIndex = clientes.findIndex(c => c.id === id);
+  if (clientesIndex === -1) return res.status(404).json({ mensagem: "Cliente não encontrado." });
 
-  const removido = clientes.splice(clienteIndex, 1)[0];
-  res.status(200).json({ mensagem: "Cliente removido com sucesso.", cliente: removido });
+  const removido = clientes.splice(clientesIndex, 1)[0];
+  res.status(200).json({ mensagem: "Cliente removido com sucesso.", clientes: removido });
 });
 
 module.exports = router;
