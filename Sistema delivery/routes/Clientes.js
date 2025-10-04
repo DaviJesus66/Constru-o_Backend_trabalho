@@ -34,13 +34,14 @@ router.post('/clientes', (req, res) => {
   }
 
   const novoCliente = {
-    id: clientes.length ? clientes[clientes.length - 1].id + 1 : 1,
-    nome,
-    email
-  };
+  id: clientes.length ? clientes[clientes.length - 1].id + 1 : 1,
+  nome,
+  email
+};
 
-  clientes.push(novoCliente);
-  res.status(201).json(novoCliente);
+clientes.push(novoCliente);
+res.status(201).json(novoCliente);
+
 });
 
 // PUT - Atualizar cliente existente
